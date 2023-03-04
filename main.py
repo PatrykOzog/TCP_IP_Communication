@@ -1,5 +1,7 @@
 import win32api
 import win32con
+import subprocess
+import os
 
 # Uruchamia pierwszą konsolkę i program
 win32api.ShellExecute(0, "open", "cmd.exe", "/K python server.py", "", win32con.SW_SHOW)

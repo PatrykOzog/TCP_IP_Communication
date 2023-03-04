@@ -7,7 +7,9 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayou
     QTextEdit, QWidget
 
 text_chars = ["@", "0", "#", "S", "%", "?", "*", "+", "=", ";", ":", "-", ",", "."]
-received_file = "rf.jpg"
+received_file = "rf"
+
+user = input("Username: ")
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(('localhost', 5555))
@@ -55,9 +57,9 @@ def send_msg(client_socket):
         try:
             path = msg[10:]
             file = open(path, "rb")
-            # dot_pos = msg.index(".")
-            # received_file = path
-            client_socket.send(received_file.encode())
+            parts = path.split(".")
+            file_to_send = f"{received_file}.{parts[1]}"
+            client_socket.send(file_to_send.encode())
             data = file.read()
             client_socket.sendall(data)
             client_socket.send(b" ")
@@ -65,19 +67,25 @@ def send_msg(client_socket):
 
         except:
             messages_box.append(f"###{path} is invalid.###\n")
+    elif msg == "" or msg == "rf":
+        pass
     else:
-        client_socket.send(msg.encode())
+        full_msg = f"{user} > " + msg
+        client_socket.send(full_msg.encode())
 
 
 def receive_msg(client_socket):
     buff_size = 16
-    #while True:
     full_msg = ''
     while True:
         try:
             msg = client_socket.recv(buff_size).decode()
-            if msg == received_file:
-                file = open(msg, "wb")
+            if msg[:2] == received_file:
+                parts = msg.split(".")
+                #extension = client_socket.recv(buff_size).decode()
+                #file_name = f"{received_file}.{extension}"
+                file_name = f"recived.{parts[1]}"
+                file = open(file_name, "wb")
                 file_bytes = b""
                 done = False
                 data = client_socket.recv(buff_size)

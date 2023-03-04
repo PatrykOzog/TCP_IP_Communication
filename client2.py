@@ -4,7 +4,7 @@ import PIL
 from PIL import Image
 
 text_chars = ["@", "0", "#", "S", "%", "?", "*", "+", "=", ";", ":", "-", ",", "."]
-received_file = "rf.jpg"
+received_file = "rf.docx"
 
 
 def gray_it_out(image):
