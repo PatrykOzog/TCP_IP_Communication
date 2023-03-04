@@ -116,13 +116,12 @@ def handle_msg():
     input_box.clear()
 
 
-receive_thread = threading.Thread(target=receive_msg, args=(client_socket,))
-receive_thread.start()
+
 
 # Ustawienia okna
 app = QApplication([])
 window = QMainWindow()
-window.setWindowTitle("PySide6 Chat")
+window.setWindowTitle("Chat")
 window.setGeometry(100, 100, 1000, 500)
 
 # Tworzenie głównego widgetu
@@ -155,6 +154,9 @@ input_layout.addWidget(send_button)
 
 messages_box.append("### To send ASCII-ART write: !sendart yourimagename.jpg ###")
 messages_box.append("### To send any file write: !sendfile yourfilename.extension ###")
+
+receive_thread = threading.Thread(target=receive_msg, args=(client_socket,))
+receive_thread.start()
 
 
 window.show()
